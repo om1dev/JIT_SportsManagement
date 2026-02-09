@@ -7,7 +7,8 @@ const helmet = require("helmet");
 const authRoutes = require("./routes/authRoutes");
 const tokenRoutes = require("./routes/tokenRoutes");
 const userRoutes = require("./routes/userRoutes");
-
+const gameRoutes = require("./routes/gameRoutes");
+const slotRoutes = require("./routes/slotRoutes");
 
 
 
@@ -23,7 +24,8 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/token", tokenRoutes);
 app.use("/api/user", userRoutes);
-
+app.use("/api/games", gameRoutes);
+app.use("/api/slots", slotRoutes);
 
 
 
