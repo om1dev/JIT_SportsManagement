@@ -22,3 +22,28 @@ exports.createBooking = (req, res) => {
     });
   });
 };
+
+// GET BOOKINGS FOR LOGGED-IN USER (safe version)
+exports.getMyBookings = (req, res) => {
+  const userId = req.user.id;
+
+  console.log("User ID from token:", userId);
+
+  const sql = `
+    SELECT * FROM bookings
+    WHERE user_id = ?
+    ORDER BY id DESC
+  `;
+
+  db.query(sql, [userId], (err, results) => {
+    if (err) {
+      console.log("Booking fetch error:", err);
+      return res.status(500).json({ error: err.message });
+    }
+
+    console.log("Bookings found:", results);
+    res.json(results);
+  });
+};
+
+
