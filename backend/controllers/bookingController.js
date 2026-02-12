@@ -23,16 +23,23 @@ exports.createBooking = (req, res) => {
   });
 };
 
-// GET BOOKINGS FOR LOGGED-IN USER (safe version)
+// GET BOOKINGS FOR LOGGED-IN USER (guaranteed version)
 exports.getMyBookings = (req, res) => {
   const userId = req.user.id;
 
-  console.log("User ID from token:", userId);
-
   const sql = `
-    SELECT * FROM bookings
-    WHERE user_id = ?
-    ORDER BY id DESC
+    SELECT 
+      b.id,
+      b.status,
+      s.day_of_week,
+      s.start_time,
+      s.end_time,
+      g.name AS game_name
+    FROM bookings b
+    JOIN slots s ON b.slot_id = s.id
+    JOIN games g ON s.game_id = g.id
+    WHERE b.user_id = ?
+    ORDER BY b.id DESC
   `;
 
   db.query(sql, [userId], (err, results) => {
@@ -45,5 +52,4 @@ exports.getMyBookings = (req, res) => {
     res.json(results);
   });
 };
-
 
